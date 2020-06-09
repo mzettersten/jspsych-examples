@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Oversplitting</title>
+        <script src="jspsych-6.1.0/jspsych.js"></script>
+        <script src="jspsych-6.1.0/plugins/jspsych-html-keyboard-response.js"></script>
+        <script src="jspsych-6.1.0/plugins/jspsych-html-button-response.js"></script>
+        <script src="jspsych-6.1.0/plugins/jspsych-video-keyboard-response.js"></script>
+        <script src="jspsych-6.1.0/plugins/jspsych-audio-button-response.js"></script>
+        <script src="jspsych-6.1.0/plugins/jspsych-audio-keyboard-response.js"></script>
+        <script src="jspsych-6.1.0/plugins/jspsych-fullscreen.js"></script>
+        <link href="jspsych-6.1.0/css/jspsych.css" rel="stylesheet" type="text/css"></link>
+    </head>
+    
+    <body></body>
+  
+  <script>
+
+    //set current date of experiment launch
+    var date = new Date;
+
+    var seconds = date.getSeconds();
+    var minutes = date.getMinutes();
+    var hour = date.getHours();
+    var year = date.getFullYear();
+    var month = date.getMonth()+1; // beware: January = 0; February = 1, etc. (so added 1 to month)
+    var day = date.getDate();
+
+    var curDate=String(month)+String(day)+String(year)+String(hour)+String(minutes)+String(seconds);
+    
+    /* create timeline */
+    var timeline = [];
+
+    /* specify fullscreen */
+    timeline.push({
+        type: 'fullscreen',
+        fullscreen_mode: true
+    })
+
+    /* define welcome message trial */
+    var welcome = {
+     type: "html-button-response",
+     stimulus: "Welcome to the experiment. Click START to begin.",
+     choices: ['START']
+    };
+    timeline.push(welcome);
+
+    /* define fixation trial */
+    var fixation = {
+        type: 'html-keyboard-response',
+        stimulus: '<div style="font-size:60px;">+</div>',
+        choices: jsPsych.NO_KEYS,
+        trial_duration: 1000
+    };
+
+    /* define intro video trial */
+    var intro_video = {
+        type: "video-keyboard-response",
+        sources: [jsPsych.timelineVariable('intro_clip')],
+        choices: [],
+	  	prompt: '',
+		width: 1280,
+		height: 720,
+		autoplay: true,
+		trial_ends_after_video: true,
+    };
+
+    /* define first video trial */
+    var first_video = {           
+        type: "video-keyboard-response",
+        sources: [jsPsych.timelineVariable('first_video')],
+        choices: [],
+		prompt: '',
+		width: 1280,
+		height: 720,
+		autoplay: true,
+		trial_ends_after_video: true,
+    };
+
+    /* define test trial */
+    var test_trial = {
+        type: "audio-button-response",
+        stimulus: "audio/tommy_next.wav",
+        choices:jsPsych.randomization.shuffle([[(jsPsych.timelineVariable('resp_1'), jsPsych.timelineVariable('resp_2'))],[(jsPsych.timelineVariable('resp_2'), jsPsych.timelineVariable('resp_1'))]]),
+        button_html: '<img src = "%choice%"/>',
+        data: jsPsych.timelineVariable('data')
+    };
+
+    /* define second video trial */
+    var second_video = {
+        type: "video-keyboard-response",
+        sources: [jsPsych.timelineVariable('second_video')],
+        choices: [],
+	    prompt: '',
+        width: 1280,
+		height: 720,
+		autoplay: true,
+		trial_ends_after_video: true,
+    };
+
+    /* define end video trial */
+    var end_video = {
+        type: "video-keyboard-response",
+        sources: [jsPsych.timelineVariable('end_clip')],
+        choices: [],
+		    prompt: '',
+		    width: 1280,
+		    height: 720,
+		    autoplay: true,
+		    trial_ends_after_video: true,
+    };
+     
+    var test_stimuli =[
+            {intro_clip: 'vid/intro_clip_1_school.mp4', first_video: 'vid/swings_clip_1_school.mp4', resp_1: 'img/junglegym_img_1_school.png', resp_2: 'img/slide_img_1_school.png', second_video: 'vid/slide_clip_1_school.mp4', end_clip: 'vid/end_clip_1_school.mp4', data: {test_part: 'test', correct_response: 'resp_2'}},
+            {intro_clip: 'vid/intro_clip_2_school.mp4', first_video: 'vid/swings_clip_2_school.mp4', resp_1: 'img/slide_img_2_school.png', resp_2: 'img/junglegym_img_2_school.png', second_video: 'vid/slide_clip_2_school.mp4', end_clip: 'vid/end_clip_2_school.mp4', data: {test_part: 'test', correct_response: 'resp_1'}},
+            {intro_clip: 'vid/intro_clip_3_school.mp4', first_video: 'vid/swings_clip_3_school.mp4', resp_1: 'img/junglegym_img_3_school.png', resp_2: 'img/slide_img_3_school.png', second_video: 'vid/slide_clip_3_school.mp4', end_clip: 'vid/end_clip_3_school.mp4', data: {test_part: 'test', correct_response: 'resp_2'}},
+            {intro_clip: 'vid/intro_clip_4_school.mp4', first_video: 'vid/swings_clip_4_school.mp4', resp_1: 'img/slide_img_4_school.png', resp_2: 'img/junglegym_img_4_school.png', second_video: 'vid/slide_clip_4_school.mp4', end_clip: 'vid/end_clip_4_school.mp4', data: {test_part: 'test', correct_response: 'resp_1'}},
+            {intro_clip: 'vid/intro_clip_5_school.mp4', first_video: 'vid/sandbox_clip_5_school.mp4', resp_1: 'img/junglegym_img_5_school.png', resp_2: 'img/slide_img_5_school.png', second_video: 'vid/junglegym_clip_5_school.mp4', end_clip: 'vid/end_clip_5_school.mp4', data: {test_part: 'test', correct_response: 'resp_1'}},
+            {intro_clip: 'vid/intro_clip_6_school.mp4', first_video: 'vid/sandbox_clip_6_school.mp4', resp_1: 'img/slide_img_6_school.png', resp_2: 'img/junglegym_img_6_school.png', second_video: 'vid/junglegym_clip_6_school.mp4', end_clip: 'vid/end_clip_6_school.mp4', data: {test_part: 'test', correct_response: 'resp_2'}},
+            {intro_clip: 'vid/intro_clip_7_school.mp4', first_video: 'vid/sandbox_clip_7_school.mp4', resp_1: 'img/junglegym_img_7_school.png', resp_2: 'img/slide_img_7_school.png', second_video: 'vid/junglegym_clip_7_school.mp4', end_clip: 'vid/end_clip_7_school.mp4', data: {test_part: 'test', correct_response: 'resp_1'}},
+            {intro_clip: 'vid/intro_clip_8_school.mp4', first_video: 'vid/sandbox_clip_8_school.mp4', resp_1: 'img/slide_img_8_school.png', resp_2: 'img/junglegym_img_8_school.png', second_video: 'vid/junglegym_clip_8_school.mp4', end_clip: 'vid/end_clip_8_school.mp4', data: {test_part: 'test', correct_response: 'resp_2'}}
+    ];
+    
+    var test_procedure = {
+        timeline: [fixation, intro_video, first_video, test_trial, second_video, end_video],
+        timeline_variables: test_stimuli,
+        sample:{
+            type: 'without-replacement'
+        }
+    };
+    timeline.push(test_procedure);
+
+    /* define thank you trial */
+    var thank_you = {
+     type: "html-button-response",
+     stimulus: "Thanks for playing with us today! Press END to end the experiment!",
+     choices: ['END']
+    };
+    timeline.push(thank_you);
+
+    /* exit fullscreen mode */
+    timeline.push({
+    type: 'fullscreen',
+     fullscreen_mode: false
+    });
+
+    /* preload images */
+    var images = ['img/junglegym_img_1_school.png', 'img/slide_img_1_school.png', 'img/slide_img_2_school.png', 'img/junglegym_img_2_school.png', 'img/junglegym_img_3_school.png',
+     'img/slide_img_3_school.png', 'img/slide_img_4_school.png', 'img/junglegym_img_4_school.png', 'img/junglegym_img_5_school.png','img/slide_img_5_school.png', 'img/slide_img_6_school.png', 
+     'img/junglegym_img_6_school.png', 'img/junglegym_img_7_school.png', 'img/slide_img_7_school.png', 'img/slide_img_8_school.png', 'img/junglegym_img_8_school.png' ];
+
+    var video = ['vid/intro_clip_1_school.mp4', 'vid/swings_clip_1_school.mp4','vid/slide_clip_1_school.mp4', 'vid/end_clip_1_school.mp4', 
+            'vid/intro_clip_2_school.mp4', 'vid/swings_clip_2_school.mp4', 'vid/slide_clip_2_school.mp4', 'vid/end_clip_2_school.mp4', 
+            'vid/intro_clip_3_school.mp4', 'vid/swings_clip_3_school.mp4', 'vid/slide_clip_3_school.mp4', 'vid/end_clip_3_school.mp4', 
+            'vid/intro_clip_4_school.mp4', 'vid/swings_clip_4_school.mp4', 'vid/slide_clip_4_school.mp4', 'vid/end_clip_4_school.mp4', 
+            'vid/intro_clip_5_school.mp4', 'vid/sandbox_clip_5_school.mp4', 'vid/junglegym_clip_5_school.mp4', 'vid/end_clip_5_school.mp4', 
+            'vid/intro_clip_6_school.mp4', 'vid/sandbox_clip_6_school.mp4', 'vid/junglegym_clip_6_school.mp4', 'vid/end_clip_6_school.mp4',
+            'vid/intro_clip_7_school.mp4', 'vid/sandbox_clip_7_school.mp4', 'vid/junglegym_clip_7_school.mp4', 'vid/end_clip_7_school.mp4', 
+            'vid/intro_clip_8_school.mp4', 'vid/sandbox_clip_8_school.mp4', 'vid/junglegym_clip_8_school.mp4', 'vid/end_clip_8_school.mp4'];
+    
+    /* start the experiment */
+    jsPsych.init({
+         timeline: timeline,
+         preload_images: images,
+         preoload_video: video,
+         fullscreen: true,
+         on_finish: function() {
+     jsPsych.data.get().localSave('csv', 'osPilot_'+curDate+'.csv');
+    }
+    });
+
+  </script>
+
+</html>
+
+
