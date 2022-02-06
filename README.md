@@ -6,4 +6,4 @@ various demos/ examples of jspsych code
 
 https://mzettersten.github.io/jspsych-examples/os_pilot_online-master/index.html
 
-https://mzettersten.github.io/jspsych-examples/mutli-image/multi-image.html
+https://mzettersten.github.io/jspsych-examples/multi-image/multi-image.html
